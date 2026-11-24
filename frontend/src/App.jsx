@@ -22,6 +22,9 @@ export default function App() {
           path="/profile"
           element={<ProtectedRoute><Profile /></ProtectedRoute>}
         />
+        <Route path="/queue" element={<ProtectedRoute><Queue /></ProtectedRoute>} />
+        <Route path="/treatments" element={<ProtectedRoute><Treatments /></ProtectedRoute>} />
+        <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </>
