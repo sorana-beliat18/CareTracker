@@ -1,60 +1,79 @@
-import { useState } from "react";
-import { Check, X } from "lucide-react";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock, Stethoscope, CheckCircle2, Play } from "lucide-react";
+
+const statusStyles = {
+  Waiting: "bg-amber-50 text-amber-700 border-amber-200/80",
+  Confirmed: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
+  Completed: "bg-slate-100 text-slate-600 border-slate-200/80"
+};
 
 export default function AppointmentCard({ appointment, onUpdateStatus }) {
-  const { id, patient, time, date, reason, doctor, status } = appointment;
-  const [isEditing, setIsEditing] = useState(false);
-  const [newStatus, setNewStatus] = useState(status);
+  const { id, patient = "Patient", time, date, reason, doctor, status = "Waiting" } = appointment || {};
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleSave = async () => {
-    await onUpdateStatus(id, newStatus);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setNewStatus(status);
-  };
-
-  const initials = patient.split(' ').map(name => name[0]).join('').toUpperCase();
+  const initials = patient
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
-    <div className="rounded-xl border border-slate-200/80 bg-white p-4 hover:border-[#1b5e20]/40 hover:shadow-md transition-all flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        <div className="bg-[#1b5e20]/10 text-[#1b5e20] font-semibold w-10 h-10 rounded-full flex items-center justify-center">
-          {initials}
+    <div className="rounded-xl border border-slate-200/80 bg-white p-4 hover:border-[#1b5e20]/40 hover:shadow-md transition-all flex flex-col justify-between gap-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[#1b5e20]/10 text-[#1b5e20] font-semibold text-sm flex items-center justify-center shrink-0">
+            {initials}
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-slate-900">{patient}</h3>
+            <p className="text-xs text-slate-500">{reason}</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-lg font-bold text-[#1b5e20]">{patient}</h3>
-          <p className="text-sm text-slate-500">Reason: {reason}</p>
-          <p className="text-sm text-slate-500">Doctor: {doctor}</p>
-        </div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <div className="flex items-center space-x-1">
-          <Clock className="w-4 h-4 text-slate-500" />
-          <span className="text-sm text-slate-500 tabular-nums">{time}</span>
-        </div>
-        <div className="flex items-center space-x-1">
-          <Calendar className="w-4 h-4 text-slate-500" />
-          <span className="text-sm text-slate-500 tabular-nums">{moment(date).format("MMMM Do, YYYY")}</span>
-        </div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <span className={`px-2 py-1 rounded-full text-sm font-semibold ${status === "Waiting" ? "bg-amber-500 text-white" : status === "Confirmed" ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-700"}`}>
+
+        <span
+          className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
+            statusStyles[status] || statusStyles.Waiting
+          }`}
+        >
           {status}
         </span>
-        <button onClick={() => onUpdateStatus(id, "Confirmed")} className="bg-emerald-500 text-white px-3 py-1 rounded hover:bg-emerald-600">
-          Confirm
-        </button>
-        <button onClick={() => onUpdateStatus(id, "Completed")} className="bg-slate-100 text-slate-700 px-3 py-1 rounded hover:bg-slate-200">
-          Complete
-        </button>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100 text-xs text-slate-500">
+        <div className="flex items-center gap-3 tabular-nums">
+          <span className="flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
+            {time}
+          </span>
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+            {date}
+          </span>
+          <span className="flex items-center gap-1">
+            <Stethoscope className="w-3.5 h-3.5 text-slate-400" />
+            {doctor}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          {status === "Waiting" && (
+            <button
+              onClick={() => onUpdateStatus(id, "Confirmed")}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1b5e20]/10 text-[#1b5e20] font-semibold hover:bg-[#1b5e20] hover:text-white transition-colors"
+            >
+              <Play className="w-3 h-3" />
+              Confirm
+            </button>
+          )}
+          {status !== "Completed" && (
+            <button
+              onClick={() => onUpdateStatus(id, "Completed")}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition-colors"
+            >
+              <CheckCircle2 className="w-3 h-3" />
+              Complete
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
