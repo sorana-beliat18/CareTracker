@@ -20,18 +20,38 @@ const mockTreatments = [
   { id: 2, patient: "Grace Black", treatment: "Consultation", notes: "Diagnosis: Flu" }
 ];
 
+export async function getAppointments() {
+  const appointments = localStorage.getItem("appointments");
+  return appointments ? JSON.parse(appointments) : [];
+}
+
 export async function bookAppointment(appointment) {
-  return api.post("/appointments", appointment);
+  const appointments = await getAppointments();
+  appointment.id = appointments.length + 1;
+  appointments.push(appointment);
+  localStorage.setItem("appointments", JSON.stringify(appointments));
+  return appointment;
 }
 
 export async function getLiveQueue() {
-  return api.get("/queue").then(({ data }) => data);
+  const queue = localStorage.getItem("queue");
+  return queue ? JSON.parse(queue) : [];
 }
 
 export async function getAppointmentHistory() {
-  return api.get("/history").then(({ data }) => data);
+  const history = localStorage.getItem("history");
+  return history ? JSON.parse(history) : [];
 }
 
-export async function manageTreatments(treatment) {
-  return api.post("/treatments", treatment);
+export async function getTreatments() {
+  const treatments = localStorage.getItem("treatments");
+  return treatments ? JSON.parse(treatments) : [];
+}
+
+export async function addTreatment(treatment) {
+  const treatments = await getTreatments();
+  treatment.id = treatments.length + 1;
+  treatments.push(treatment);
+  localStorage.setItem("treatments", JSON.stringify(treatments));
+  return treatment;
 }
