@@ -4,6 +4,12 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { Bell } from "lucide-react";
 
+const CustomLogo = () => (
+  <svg className="w-8 h-8 text-teal-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2zm-1 8h4v2h-4z" fill="currentColor" />
+  </svg>
+);
+
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
@@ -29,11 +35,9 @@ export default function Login() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="bg-gradient-to-r from-teal-600 to-emerald-600 p-10 flex flex-col justify-center items-center">
-        <div className="flex items-center">
-          <Bell className="text-teal-600 mr-2" />
-          <h1 className="text-teal-600 font-bold text-2xl">CareTracker</h1>
-        </div>
-        <p className="text-white text-center mt-4">Welcome to CareTracker</p>
+        <CustomLogo />
+        <h1 className="text-white font-bold text-3xl mt-4">Seamless Patient-Doctor Care</h1>
+        <p className="text-white text-center mt-2">Effortlessly manage appointments and treatments.</p>
       </div>
       <div className="bg-slate-50 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 w-full max-w-md">
@@ -41,22 +45,26 @@ export default function Login() {
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-4" onSubmit={submit}>
             <div className="relative">
+              <label className="block text-slate-700 font-medium mb-1">Email Address</label>
               <input
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={update}
                 required
+                placeholder="Enter your email"
                 className="border border-slate-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500 w-full"
               />
             </div>
             <div className="relative">
+              <label className="block text-slate-700 font-medium mb-1">Password</label>
               <input
                 type="password"
                 name="password"
                 value={form.password}
                 onChange={update}
                 required
+                placeholder="Enter your password"
                 className="border border-slate-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500 w-full"
               />
             </div>
