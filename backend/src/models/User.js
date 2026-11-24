@@ -12,6 +12,8 @@ const userSchema = new mongoose.Schema(
       index: true
     },
     passwordHash: { type: String, required: true, select: false },
+    mfaSecret: { type: String, select: false },
+    mfaEnabled: { type: Boolean, default: false },
     role: {
       type: String,
       enum: ["patient", "receptionist", "doctor"],

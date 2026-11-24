@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
-import { Heart } from "lucide-react";
+import MfaChallenge from "../components/MfaChallenge";
 
 const CustomLogo = () => (
   <svg className="w-8 h-8 text-teal-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,6 +13,7 @@ const CustomLogo = () => (
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [challenge, setChallenge] = useState(null);
   const { saveSession } = useAuth();
   const navigate = useNavigate();
 
@@ -25,11 +26,29 @@ export default function Login() {
     setError("");
     try {
       const { data } = await api.post("/auth/login", form);
-      saveSession(data);
-      navigate("/dashboard");
+      setChallenge(data);
     } catch (requestError) {
       setError(requestError.response?.data?.message || "Login failed");
     }
+  }
+
+  function finishLogin(data) {
+    saveSession(data);
+    navigate("/dashboard");
+  }
+
+  if (challenge) {
+    return (
+      <main className="auth-layout">
+        <section className="card auth-card">
+          <MfaChallenge
+            challenge={challenge}
+            onComplete={finishLogin}
+            onBack={() => setChallenge(null)}
+          />
+        </section>
+      </main>
+    );
   }
 
   return (

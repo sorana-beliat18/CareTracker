@@ -9,6 +9,7 @@ management, treatment plans, and care adherence.
 - User and notification schemas
 - Registration, login, profile, JWT authentication, and role-based
   authorization
+- TOTP two-factor authentication with authenticator-app QR enrollment
 - React login, registration, profile, protected routing, navigation, and
   notification bell
 
@@ -123,7 +124,37 @@ The seed creates:
 | Receptionist | `reception@caretracker.local` | `CareTracker123!` |
 | Doctor | `doctor@caretracker.local` | `CareTracker123!` |
 
-Running the seed again resets these demo users and notifications.
+Seeding only adds demo accounts that do not already exist. Existing accounts and
+notifications are preserved. The listed password is guaranteed only for demo
+accounts created by that seed run; existing accounts may have different
+passwords.
+
+## Two-Factor Authentication
+
+CareTracker uses time-based one-time passwords (TOTP), the same authenticator
+app approach as SmartChef.
+
+1. Register with your name, email, password, and role.
+2. Scan the displayed QR code with Google Authenticator, Microsoft
+   Authenticator, or another TOTP app. You can manually enter the displayed
+   setup key if scanning is unavailable.
+3. Enter the current six-digit code from the app to enable 2FA and finish
+   registration.
+4. On later logins, enter your email and password, then enter the current
+   six-digit authenticator code.
+
+Existing accounts without 2FA are prompted to enroll the first time they sign
+in. The TOTP secret is encrypted in MongoDB using a key derived from
+`JWT_SECRET`. Keep that value stable; changing it makes already-enrolled
+authenticator secrets unreadable.
+
+API endpoints:
+
+- `POST /api/auth/register` creates the account and returns an MFA setup
+  challenge.
+- `POST /api/auth/login` checks the password and returns an MFA challenge.
+- `POST /api/auth/mfa/verify` verifies the six-digit code and issues the
+  authenticated session.
 
 ## Frontend Installation and Start
 

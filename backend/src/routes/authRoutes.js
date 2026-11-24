@@ -3,6 +3,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { requireAuth } from "../middleware/auth.js";
+import {
+  createTotpSecret,
+  getManualKey,
+  getOtpAuthUrl,
+  verifyTotpCode
+} from "../utils/totp.js";
 
 const router = express.Router();
 
@@ -23,6 +29,23 @@ function publicUser(user) {
   };
 }
 
+function createMfaChallenge(user, purpose) {
+  return jwt.sign(
+    { sub: user.id, purpose },
+    process.env.JWT_SECRET,
+    { expiresIn: "10m" }
+  );
+}
+
+function mfaSetupResponse(user, encryptedSecret) {
+  return {
+    mfaSetupRequired: true,
+    challengeToken: createMfaChallenge(user, "mfa-setup"),
+    otpAuthUrl: getOtpAuthUrl(user.email, encryptedSecret),
+    manualKey: getManualKey(encryptedSecret)
+  };
+}
+
 router.post("/register", async (req, res, next) => {
   try {
     const { name, email, password, role = "patient" } = req.body;
@@ -39,18 +62,24 @@ router.post("/register", async (req, res, next) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
+    const mfa = createTotpSecret(email.toLowerCase().trim());
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
       passwordHash,
+      mfaSecret: mfa.encryptedSecret,
+      mfaEnabled: false,
       role
     });
 
     res.status(201).json({
-      token: createToken(user),
-      user: publicUser(user)
+      ...mfaSetupResponse(user, mfa.encryptedSecret),
+      manualKey: mfa.manualKey
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ message: "Email is already registered" });
+    }
     next(error);
   }
 });
@@ -62,9 +91,60 @@ router.post("/login", async (req, res, next) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() }).select("+passwordHash");
+    const user = await User.findOne({ email: email.toLowerCase().trim() })
+      .select("+passwordHash +mfaSecret");
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
       return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    if (!user.mfaEnabled) {
+      const mfa = createTotpSecret(user.email);
+      user.mfaSecret = mfa.encryptedSecret;
+      await user.save();
+      return res.json(mfaSetupResponse(user, user.mfaSecret));
+    }
+
+    res.json({
+      mfaRequired: true,
+      challengeToken: createMfaChallenge(user, "mfa-login")
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/mfa/verify", async (req, res, next) => {
+  try {
+    const { challengeToken, code } = req.body;
+    if (!challengeToken || !code) {
+      return res.status(400).json({ message: "Challenge token and six-digit code are required" });
+    }
+
+    let challenge;
+    try {
+      challenge = jwt.verify(challengeToken, process.env.JWT_SECRET);
+    } catch {
+      return res.status(401).json({ message: "The verification session expired. Please start again." });
+    }
+
+    if (!["mfa-setup", "mfa-login"].includes(challenge.purpose)) {
+      return res.status(401).json({ message: "Invalid verification session" });
+    }
+
+    const user = await User.findById(challenge.sub).select("+mfaSecret");
+    if (!user || !user.mfaSecret) {
+      return res.status(401).json({ message: "MFA setup is no longer available. Please sign in again." });
+    }
+    if (challenge.purpose === "mfa-login" && !user.mfaEnabled) {
+      return res.status(401).json({ message: "MFA is not enabled. Please sign in again." });
+    }
+    if (!verifyTotpCode(user.mfaSecret, code)) {
+      return res.status(401).json({ message: "Invalid authenticator code" });
+    }
+
+    if (challenge.purpose === "mfa-setup") {
+      user.mfaEnabled = true;
+      await user.save();
     }
 
     res.json({

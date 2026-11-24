@@ -45,3 +45,12 @@ input:disabled { background: #eef3f4; color: #667985; }
 .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 24px; }
 .feature { min-height: 110px; display: grid; place-items: center; padding: 18px; border-radius: 10px; background: #edf8f7; text-align: center; font-weight: 700; }
 .loading { min-height: 60vh; display: grid; place-items: center; }
+.mfa-panel h2 { margin-top: 0; text-align: center; }
+.mfa-panel > p { line-height: 1.5; text-align: center; }
+.mfa-qr { display: grid; place-items: center; margin: 20px auto; padding: 16px; width: fit-content; border: 1px solid #dce8ea; border-radius: 10px; background: white; }
+.mfa-key-label { margin-bottom: 8px; }
+.mfa-key { display: block; overflow-wrap: anywhere; padding: 12px; border-radius: 8px; background: #edf3f4; text-align: center; letter-spacing: 0.08em; }
+.mfa-security-note { color: #a12626; font-size: 0.9rem; font-weight: 650; }
+.mfa-code { text-align: center; font-size: 1.4rem; letter-spacing: 0.35em; }
+.mfa-back { display: block; margin: 16px auto 0; border: 0; background: transparent; color: #18767a; cursor: pointer; font: inherit; }
+.primary:disabled, .mfa-back:disabled { cursor: wait; opacity: 0.65; }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
-import { Heart } from "lucide-react";
+import MfaChallenge from "../components/MfaChallenge";
 
 const CustomLogo = () => (
   <svg className="w-8 h-8 text-teal-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +18,7 @@ export default function Register() {
     role: "patient"
   });
   const [error, setError] = useState("");
+  const [challenge, setChallenge] = useState(null);
   const { saveSession } = useAuth();
   const navigate = useNavigate();
 
@@ -30,11 +31,29 @@ export default function Register() {
     setError("");
     try {
       const { data } = await api.post("/auth/register", form);
-      saveSession(data);
-      navigate("/dashboard");
+      setChallenge(data);
     } catch (requestError) {
       setError(requestError.response?.data?.message || "Registration failed");
     }
+  }
+
+  function finishRegistration(data) {
+    saveSession(data);
+    navigate("/dashboard");
+  }
+
+  if (challenge) {
+    return (
+      <main className="auth-layout">
+        <section className="card auth-card">
+          <MfaChallenge
+            challenge={challenge}
+            onComplete={finishRegistration}
+            onBack={() => navigate("/login")}
+          />
+        </section>
+      </main>
+    );
   }
 
   return (

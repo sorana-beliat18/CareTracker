@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
-import { Heart } from "lucide-react";
+import { Heart, Menu } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();

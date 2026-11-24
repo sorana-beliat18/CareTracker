@@ -13,8 +13,6 @@ async function seed() {
     dbName: process.env.DATABASE_NAME || "caretracker"
   });
 
-  await Promise.all([User.deleteMany({}), Notification.deleteMany({})]);
-
   const users = [
     { name: "Demo Patient", email: "patient@caretracker.local", role: "patient" },
     { name: "Demo Receptionist", email: "reception@caretracker.local", role: "receptionist" },
@@ -22,17 +20,25 @@ async function seed() {
   ];
 
   const passwordHash = await bcrypt.hash("CareTracker123!", 12);
-  const createdUsers = await User.insertMany(
-    users.map((user) => ({ ...user, passwordHash }))
-  );
+  let patientCreated = false;
+  for (const userData of users) {
+    const existing = await User.findOne({ email: userData.email });
+    if (existing) continue;
 
-  await Notification.create({
-    userId: createdUsers[0]._id,
-    message: "Welcome to CareTracker. Your account is ready."
-  });
+    const user = await User.create({ ...userData, passwordHash, mfaEnabled: false });
+    if (user.role === "patient") {
+      await Notification.create({
+        userId: user._id,
+        message: "Welcome to CareTracker. Your account is ready."
+      });
+      patientCreated = true;
+    }
+  }
 
-  console.log("Seed completed.");
-  console.log("Password for demo accounts: CareTracker123!");
+  console.log("Seed completed. Existing user and notification records were preserved.");
+  if (patientCreated) {
+    console.log("Password for newly created demo accounts: CareTracker123!");
+  }
   await mongoose.disconnect();
 }
 
