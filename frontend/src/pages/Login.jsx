@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
-import { Bell } from "lucide-react";
+import { Heart } from "lucide-react";
 
 const CustomLogo = () => (
   <svg className="w-8 h-8 text-teal-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

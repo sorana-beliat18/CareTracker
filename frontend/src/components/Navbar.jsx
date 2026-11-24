@@ -39,8 +39,9 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-50 px-4 py-2 flex items-center justify-between">
-      <div className="flex items-center">
+      <div className="flex items-center space-x-2">
         <Heart className="text-teal-600" />
+        <h1 className="text-teal-600 font-bold text-xl">CareTracker</h1>
       </div>
       {user && (
         <div className="flex items-center space-x-4">
