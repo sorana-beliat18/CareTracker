@@ -51,6 +51,29 @@ export default function Navbar() {
             </div>
           )}
           <Link to="/profile">Profile</Link>
+          <span className="role-pill">Role: {user.role}</span>
+          <button className="bell" onClick={() => setOpen((value) => !value)} aria-label="Notifications">
+            Bell <span className="badge">{unreadCount}</span>
+          </button>
+          {open && (
+            <div className="notification-panel">
+              {notifications.length === 0 && <p>No notifications</p>}
+              {notifications.map((item) => (
+                <button
+                  className={item.read ? "notification read" : "notification"}
+                  key={item._id}
+                  onClick={() => markRead(item._id)}
+                >
+                  {item.message}
+                </button>
+              ))}
+            </div>
+          )}
+          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/queue">Live Queue</Link>
+          <Link to="/treatments">Treatments</Link>
+          <Link to="/history">History</Link>
+          <Link to="/profile">Profile</Link>
           <button className="link-button" onClick={handleLogout}>Logout</button>
         </div>
       )}
