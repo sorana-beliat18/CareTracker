@@ -55,3 +55,19 @@ export async function addTreatment(treatment) {
   localStorage.setItem("treatments", JSON.stringify(treatments));
   return treatment;
 }
+export async function createAppointment(appointment) {
+  const appointments = await getAppointments();
+  appointment.id = appointments.length + 1;
+  appointments.push(appointment);
+  localStorage.setItem("appointments", JSON.stringify(appointments));
+  return appointment;
+}
+
+export async function updateAppointmentStatus(id, status) {
+  const appointments = await getAppointments();
+  const updatedAppointments = appointments.map(appointment =>
+    appointment.id === id ? { ...appointment, status } : appointment
+  );
+  localStorage.setItem("appointments", JSON.stringify(updatedAppointments));
+  return updatedAppointments;
+}

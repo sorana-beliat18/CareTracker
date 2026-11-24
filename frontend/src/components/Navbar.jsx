@@ -47,11 +47,26 @@ export default function Navbar() {
         <div className="flex items-center space-x-4">
           <nav className="hidden md:flex space-x-4">
             <Link className="text-slate-700 hover:text-teal-600" to="/dashboard">Dashboard</Link>
-            <Link className="text-slate-700 hover:text-teal-600" to="/queue">Live Queue</Link>
+            <Link className="text-slate-700 hover:text-teal-600" to="/queue">Queue</Link>
             <Link className="text-slate-700 hover:text-teal-600" to="/treatments">Treatments</Link>
             <Link className="text-slate-700 hover:text-teal-600" to="/history">History</Link>
             <Link className="text-slate-700 hover:text-teal-600" to="/profile">Profile</Link>
           </nav>
+          <button className="md:hidden text-teal-600 hover:text-teal-700" onClick={() => setOpen((value) => !value)}>
+            <Menu className="w-6 h-6" />
+          </button>
+          {open && (
+            <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 shadow-lg rounded-lg">
+              <nav className="flex flex-col space-y-2 p-4">
+                <Link className="text-slate-700 hover:text-teal-600" to="/dashboard">Dashboard</Link>
+                <Link className="text-slate-700 hover:text-teal-600" to="/queue">Queue</Link>
+                <Link className="text-slate-700 hover:text-teal-600" to="/treatments">Treatments</Link>
+                <Link className="text-slate-700 hover:text-teal-600" to="/history">History</Link>
+                <Link className="text-slate-700 hover:text-teal-600" to="/profile">Profile</Link>
+                <button className="text-teal-600 hover:text-teal-700" onClick={handleLogout}>Logout</button>
+              </nav>
+            </div>
+          )}
           <span className="bg-teal-600 text-white px-2 py-1 rounded-full text-sm font-semibold">
             Role: {user.role}
           </span>
