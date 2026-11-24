@@ -2,9 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
-import { CareLoopLogo } from "../components/CareLoopLogo";
-import { ClinicalWorkflow } from "../components/ClinicalWorkflow";
-import { TrustBadges } from "../components/TrustBadges";
 import { Bell } from "lucide-react";
 
 export default function Register() {
@@ -37,9 +34,11 @@ export default function Register() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="bg-gradient-to-r from-teal-600 to-emerald-600 p-10 flex flex-col justify-center items-center">
-        <CareLoopLogo />
-        <ClinicalWorkflow />
-        <TrustBadges />
+        <div className="flex items-center">
+          <Bell className="text-teal-600 mr-2" />
+          <h1 className="text-teal-600 font-bold text-2xl">CareTracker</h1>
+        </div>
+        <p className="text-white text-center mt-4">Welcome to CareTracker</p>
       </div>
       <div className="bg-slate-50 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 w-full max-w-md">
