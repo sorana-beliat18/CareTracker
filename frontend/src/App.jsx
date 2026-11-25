@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
+import PatientDashboard from "./pages/PatientDashboard";
 
 export default function App() {
   return (
@@ -17,14 +18,9 @@ export default function App() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-       <Route
-          path="/dashboard"
-          element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
-        />
-        <Route
-          path="/profile"
-          element={<ProtectedRoute><Profile /></ProtectedRoute>}
-        />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/patientdashboard" element={<ProtectedRoute><PatientDashboard /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/queue" element={<ProtectedRoute><Queue /></ProtectedRoute>} />
         <Route path="/treatments" element={<ProtectedRoute><Treatments /></ProtectedRoute>} />
         <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />

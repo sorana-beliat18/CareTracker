@@ -100,13 +100,13 @@ export default function Dashboard() {
               Clinical Operations
             </p>
             <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-              Welcome back, <span className="text-[#1b5e20]">{user?.name || "Dr. Elena Vance"}</span>
+              Welcome back, <span className="text-[#0f766e]">{user?.name || "Dr. Elena Vance"}</span>
             </h1>
             <p className="text-sm text-slate-500 mt-1">{todayFormatted}</p>
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-[#1b5e20] text-white px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-xs hover:bg-[#144718] transition-colors self-start sm:self-auto"
+            className="bg-[#0f766e] text-white px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-xs hover:bg-[#115e59] transition-colors self-start sm:self-auto"
           >
             <Plus className="w-4 h-4" />
             <span>New Appointment</span>
@@ -117,7 +117,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
             <div className="flex items-center justify-between mb-3">
-              <div className="bg-[#1b5e20]/10 text-[#1b5e20] p-2.5 rounded-xl">
+              <div className="bg-[#0f766e]/10 text-[#0f766e] p-2.5 rounded-xl">
                 <Calendar className="w-5 h-5" />
               </div>
               <span className="text-3xl font-bold text-slate-900 tracking-tight tabular-nums">
@@ -180,7 +180,7 @@ export default function Dashboard() {
                     onClick={() => setFilter(status)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                       filter === status
-                        ? "bg-[#1b5e20] text-white shadow-xs"
+                        ? "bg-[#0f766e] text-white shadow-xs"
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
@@ -196,7 +196,7 @@ export default function Dashboard() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search patient or reason..."
-                  className="w-full sm:w-64 border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b5e20]/20 focus:border-[#1b5e20]"
+                  className="w-full sm:w-64 border border-slate-200 rounded-xl pl-9 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20 focus:border-[#0f766e]"
                 />
               </div>
             </div>
@@ -243,7 +243,7 @@ export default function Dashboard() {
                   placeholder="e.g., Clara Oswald"
                   value={newAppointment.patient}
                   onChange={(e) => setNewAppointment({ ...newAppointment, patient: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b5e20]/20 focus:border-[#1b5e20]"
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20 focus:border-[#0f766e]"
                 />
               </div>
 
@@ -258,7 +258,7 @@ export default function Dashboard() {
                     placeholder="Nov 24, 2026"
                     value={newAppointment.date}
                     onChange={(e) => setNewAppointment({ ...newAppointment, date: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b5e20]/20 focus:border-[#1b5e20]"
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20 focus:border-[#0f766e]"
                   />
                 </div>
                 <div>
@@ -271,7 +271,7 @@ export default function Dashboard() {
                     placeholder="03:30 PM"
                     value={newAppointment.time}
                     onChange={(e) => setNewAppointment({ ...newAppointment, time: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b5e20]/20 focus:border-[#1b5e20]"
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20 focus:border-[#0f766e]"
                   />
                 </div>
               </div>
@@ -286,7 +286,7 @@ export default function Dashboard() {
                   placeholder="e.g., Routine Check-up"
                   value={newAppointment.reason}
                   onChange={(e) => setNewAppointment({ ...newAppointment, reason: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b5e20]/20 focus:border-[#1b5e20]"
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20 focus:border-[#0f766e]"
                 />
               </div>
 
@@ -300,7 +300,7 @@ export default function Dashboard() {
                   placeholder="e.g., Dr. Elena Vance"
                   value={newAppointment.doctor}
                   onChange={(e) => setNewAppointment({ ...newAppointment, doctor: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b5e20]/20 focus:border-[#1b5e20]"
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20 focus:border-[#0f766e]"
                 />
               </div>
             </div>
@@ -315,7 +315,7 @@ export default function Dashboard() {
               </button>
               <button
                 type="submit"
-                className="bg-[#1b5e20] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#144718] transition-colors"
+                className="bg-[#0f766e] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#115e59] transition-colors"
               >
                 Book Appointment
               </button>

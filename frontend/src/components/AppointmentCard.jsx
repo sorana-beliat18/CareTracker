@@ -17,10 +17,10 @@ export default function AppointmentCard({ appointment, onUpdateStatus }) {
     .toUpperCase();
 
   return (
-    <div className="rounded-xl border border-slate-200/80 bg-white p-4 hover:border-[#1b5e20]/40 hover:shadow-md transition-all flex flex-col justify-between gap-4">
+    <div className="rounded-xl border border-slate-200/80 bg-white p-4 hover:border-[#0f766e]/40 hover:shadow-md transition-all flex flex-col justify-between gap-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#1b5e20]/10 text-[#1b5e20] font-semibold text-sm flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-full bg-[#0f766e]/10 text-[#0f766e] font-semibold text-sm flex items-center justify-center shrink-0">
             {initials}
           </div>
           <div>
@@ -58,7 +58,7 @@ export default function AppointmentCard({ appointment, onUpdateStatus }) {
           {status === "Waiting" && (
             <button
               onClick={() => onUpdateStatus(id, "Confirmed")}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1b5e20]/10 text-[#1b5e20] font-semibold hover:bg-[#1b5e20] hover:text-white transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0f766e]/10 text-[#0f766e] font-semibold hover:bg-[#0f766e] hover:text-white transition-colors"
             >
               <Play className="w-3 h-3" />
               Confirm
