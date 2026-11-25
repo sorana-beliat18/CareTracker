@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PatientDashboard from "./PatientDashboard";
 import { useAuth } from "../context/AuthContext";
 import AppointmentCard from "../components/AppointmentCard";
 import { getAppointments, bookAppointment } from "../services/careService";
@@ -62,6 +63,8 @@ export default function Dashboard() {
       )
     );
   };
+
+  const [previewRole, setPreviewRole] = useState(user?.role === "doctor" ? "doctor" : "patient");
 
   const totalCount = appointments.length;
   const waitingCount = appointments.filter((a) => a.status === "Waiting").length;
